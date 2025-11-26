@@ -79,27 +79,28 @@ public:
         }
     }
     void RemoveDuplicate() {
-        if (head == last) throw - 1;
+        if (head == last) throw -1;
         Link* curr = head->next;
 
         while (curr != head) {
-
             Link* prev = curr;
             Link* tmp = curr->next;
 
-            while (tmp != head) {
+            // Внутренний цикл: проверяем все элементы после curr
+            while (curr != head) {
                 if (tmp->val == curr->val) {
+                    // Удаляем дубликат
                     prev->next = tmp->next;
                     delete tmp;
-                    tmp->next = prev->next;
+                    tmp = prev->next; // двигаем tmp на следующий после удалённого
                 }
                 else {
                     prev = tmp;
                     tmp = tmp->next;
-                    curr = curr->next;
                 }
+                curr = curr->next;
             }
         }
-
     }
+
 };
