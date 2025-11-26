@@ -1,8 +1,10 @@
-#include "List.h"
+ï»¿#include "List.h"
 #include "HList.h"
+#include "HListExtended.h"
 #include <iostream>
 #include <cassert>
 
+#include "DList.h"
 
 int main() {
     List L;
@@ -12,59 +14,59 @@ int main() {
 
     std::cout << "Size: " << L.Size() << "\n"; // 3
 
-    // Èíäåêñàöèÿ
+    // Ð˜Ð½Ð´ÐµÐºÑÐ°Ñ†Ð¸Ñ
     std::cout << "L[0]: " << L[0] << "\n"; // 1
     std::cout << "L[1]: " << L[1] << "\n"; // 2
     std::cout << "L[2]: " << L[2] << "\n"; // 3
 
-    // Èòåðàòîð
+    // Ð˜Ñ‚ÐµÑ€Ð°Ñ‚Ð¾Ñ€
     Iterator it = L.iter();
     while (it.hasNext()) {
         std::cout << it.Next() << " "; // 1 2 3
     }
     std::cout << "\n";
 
-    // Óäàëåíèå ïî èíäåêñó
-    L.delInd(1); // óäàëèòü 2, ñïèñîê -> [1, 3]
+    // Ð£Ð´Ð°Ð»ÐµÐ½Ð¸Ðµ Ð¿Ð¾ Ð¸Ð½Ð´ÐµÐºÑÑƒ
+    L.delInd(1); // ÑƒÐ´Ð°Ð»Ð¸Ñ‚ÑŒ 2, ÑÐ¿Ð¸ÑÐ¾Ðº -> [1, 3]
     std::cout << "After delInd(1): " << L[0] << " " << L[1] << "\n"; // 1 3
 
-    // Êîïèðîâàíèå
-    List A = L; // ãëóáîêàÿ êîïèÿ
+    // ÐšÐ¾Ð¿Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ðµ
+    List A = L; // Ð³Ð»ÑƒÐ±Ð¾ÐºÐ°Ñ ÐºÐ¾Ð¿Ð¸Ñ
     A.addFirst(0); // A: [0,1,3], L: [1,3]
     std::cout << "A[0]: " << A[0] << " L[0]: " << L[0] << "\n"; // 0 vs 1
 
-    // Ïåðåìåùåíèå
-    List M = std::move(A); // A ñòàíîâèòñÿ ïóñòûì ëîãè÷åñêè
+    // ÐŸÐµÑ€ÐµÐ¼ÐµÑ‰ÐµÐ½Ð¸Ðµ
+    List M = std::move(A); // A ÑÑ‚Ð°Ð½Ð¾Ð²Ð¸Ñ‚ÑÑ Ð¿ÑƒÑÑ‚Ñ‹Ð¼ Ð»Ð¾Ð³Ð¸Ñ‡ÐµÑÐºÐ¸
     std::cout << "M Size: " << M.Size() << "\n"; // 3
 
 
 
-    // 1. Ñîçäàíèå ïóñòîãî ñïèñêà
+    // 1. Ð¡Ð¾Ð·Ð´Ð°Ð½Ð¸Ðµ Ð¿ÑƒÑÑ‚Ð¾Ð³Ð¾ ÑÐ¿Ð¸ÑÐºÐ°
     HList list;
-    // head == last, ñïèñîê ïóñò
+    // head == last, ÑÐ¿Ð¸ÑÐ¾Ðº Ð¿ÑƒÑÑ‚
     try {
         list.RemoveLast();
-        assert(false); // äîëæíî âûáðîñèòü èñêëþ÷åíèå
+        assert(false); // Ð´Ð¾Ð»Ð¶Ð½Ð¾ Ð²Ñ‹Ð±Ñ€Ð¾ÑÐ¸Ñ‚ÑŒ Ð¸ÑÐºÐ»ÑŽÑ‡ÐµÐ½Ð¸Ðµ
     }
     catch (...) {
         std::cout << "Test 1 passed: RemoveLast on empty throws\n";
     }
 
-    // 2. Äîáàâëåíèå ýëåìåíòîâ
+    // 2. Ð”Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð¾Ð²
     list.addfirst(10); // [10]
     list.addlast(20);  // [10, 20]
     list.addlast(30);  // [10, 20, 30]
 
     std::cout << "Test 2 passed: addfirst/addlast\n";
 
-    // 3. Êîïèðóþùèé êîíñòðóêòîð
+    // 3. ÐšÐ¾Ð¿Ð¸Ñ€ÑƒÑŽÑ‰Ð¸Ð¹ ÐºÐ¾Ð½ÑÑ‚Ñ€ÑƒÐºÑ‚Ð¾Ñ€
     HList copy(list);
     copy.addlast(40); // [10,20,30,40]
     std::cout << "Test 3 passed: copy constructor deep copy\n";
 
     // 4. RemoveLast
-    list.RemoveLast(); // óäàëÿåì 30 ? [10,20]
-    list.RemoveLast(); // óäàëÿåì 20 ? [10]
+    list.RemoveLast(); // ÑƒÐ´Ð°Ð»ÑÐµÐ¼ 30 â†’ [10,20]
+    list.RemoveLast(); // ÑƒÐ´Ð°Ð»ÑÐµÐ¼ 20 â†’ [10]
     std::cout << "Test 4 passed: RemoveLast\n";
 
     // 5. Reverse
@@ -72,7 +74,7 @@ int main() {
     rev.addlast(1);
     rev.addlast(2);
     rev.addlast(3); // [1,2,3]
-    rev.Reverse();  // äîëæíî ñòàòü [3,2,1]
+    rev.Reverse();  // Ð´Ð¾Ð»Ð¶Ð½Ð¾ ÑÑ‚Ð°Ñ‚ÑŒ [3,2,1]
     std::cout << "Test 5 passed: Reverse\n";
 
     // 6. RemoveAllSame
@@ -81,7 +83,7 @@ int main() {
     same.addlast(5);
     same.addlast(7);
     same.addlast(5); // [5,5,7,5]
-    same.RemoveAllSame(5); // äîëæíî îñòàòüñÿ [7]
+    same.RemoveAllSame(5); // Ð´Ð¾Ð»Ð¶Ð½Ð¾ Ð¾ÑÑ‚Ð°Ñ‚ÑŒÑÑ [7]
     std::cout << "Test 6 passed: RemoveAllSame\n";
 
     // 7. RemoveDuplicate
@@ -91,13 +93,10 @@ int main() {
     dup.addlast(1);
     dup.addlast(3);
     dup.addlast(2); // [1,2,1,3,2]
-    dup.RemoveDuplicate(); // äîëæíî îñòàòüñÿ [1,2,3]
+    dup.RemoveDuplicate(); // Ð´Ð¾Ð»Ð¶Ð½Ð¾ Ð¾ÑÑ‚Ð°Ñ‚ÑŒÑÑ [1,2,3]
     std::cout << "Test 7 passed: RemoveDuplicate\n";
 
     std::cout << "All tests passed!\n";
-
-
-
 
 
 
