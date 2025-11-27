@@ -3,6 +3,22 @@
 реализовать метод
 удаляет все нечетные элементы (по значению нечетные) из списка
 все работы на указатели в методе т е del iтое нельзя
+void removeOdd() {
+    Link* prev = head;
+    Link* curr = head->next;
+
+    while (curr != head) {
+        if (curr->val % 2 != 0) { // нечётное
+            prev->next = curr->next;
+            if (curr == last) last = prev; // если удаляем последний
+            delete curr;
+            curr = prev->next;
+        } else {
+            prev = curr;
+            curr = curr->next;
+        }
+    }
+}
 
 
 задание на конечные автоматы
