@@ -112,6 +112,68 @@ enum State {
 сделай через if else
 char c = (i < input.size() ? input[i] : ' '); // добавляем пробел в конце
 
+#include <iostream>
+#include <string>
+using namespace std;
+
+enum State { S0, S1, S2, SNUM, SERR };
+
+bool belongsToLanguage(const string& input) {
+    State st = S0;
+    int countNumbers = 0;
+    bool inNumber = false;
+
+    for (size_t i = 0; i <= input.size(); ++i) {
+        char c = (i < input.size() ? input[i] : ' '); // добавляем пробел в конце
+
+        if (st == S0 || st == S1 || st == S2) {
+            if (c >= '0' && c <= '9') {
+                st = SNUM;
+                inNumber = true;
+            }
+        }
+        else if (st == SNUM) {
+            if (c >= '0' && c <= '9') {
+                // остаёмся внутри числа
+            } else if (c == ' ') {
+                // число закончилось
+                countNumbers++;
+                if (countNumbers == 1) st = S1;
+                else if (countNumbers == 2) st = S2;
+                inNumber = false;
+            } else {
+                st = SERR; // ошибка
+            }
+        }
+        else if (st == SERR) {
+            if (c == ' ') {
+                st = S0; // сброс после ошибки
+            }
+        }
+    }
+
+    return (st == S2 || countNumbers >= 2);
+}
+
+int main() {
+    string s;
+    cout << "Введите строку: ";
+    getline(cin, s);
+
+    if (belongsToLanguage(s))
+        cout << "Слово принадлежит языку (>=2 числа)\n";
+    else
+        cout << "Слово НЕ принадлежит языку\n";
+
+    return 0;
+}
+ enum State { 
+    S0,   // начальное состояние, пока не найдено ни одного числа
+    S1,   // найдено одно число
+    S2,   // найдено два числа (принимающее состояние)
+    SNUM, // внутри числа (читаем цифры)
+    SERR  // ошибка (например, встретили нецифровой символ внутри числа)
+};
 
 
 
