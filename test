@@ -19,6 +19,18 @@ void removeOdd() {
         }
     }
 }
+int main() {
+    HList l;
+    l.addlast(1);
+    l.addlast(2);
+    l.addlast(3);
+    l.addlast(4);
+    l.addlast(5);
+
+    l.removeOdd(); // удаляем все нечётные → [2,4]
+
+    cout << "Size: " << l.Size() << "\n"; // 2
+}
 
 
 задание на конечные автоматы
