@@ -101,4 +101,19 @@ int main() {
     return 0;
 }
 
+добавь описание
+enum State { 
+    S0, //
+    S1, //
+    S2, //
+    SNUM, //
+    SERR //
+};
+сделай через if else
+char c = (i < input.size() ? input[i] : ' '); // добавляем пробел в конце
+
+
+
+
+
 
