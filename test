@@ -39,3 +39,66 @@ int main() {
 можно case использовать
 слово разделено пробелами и числом считается только числа разделенные пробелом
 для проверки является ли числом нужно сравнивать с 0 и 9 больше = 0 и меньше = 9
+
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+enum State { S0, S1, S2, SNUM, SERR };
+
+bool belongsToLanguage(const string& input) {
+    State st = S0;
+    int countNumbers = 0;
+    bool inNumber = false;
+
+    for (size_t i = 0; i <= input.size(); ++i) {
+        char c = (i < input.size() ? input[i] : ' '); // добавляем пробел в конце
+
+        switch (st) {
+        case S0:
+        case S1:
+        case S2:
+            if (c >= '0' && c <= '9') {
+                st = SNUM;
+                inNumber = true;
+            }
+            break;
+
+        case SNUM:
+            if (c >= '0' && c <= '9') {
+                // остаёмся в числе
+            } else if (c == ' ') {
+                // число закончилось
+                countNumbers++;
+                if (countNumbers == 1) st = S1;
+                else if (countNumbers == 2) st = S2;
+                inNumber = false;
+            } else {
+                st = SERR; // ошибка
+            }
+            break;
+
+        case SERR:
+            if (c == ' ') st = S0; // сброс
+            break;
+        }
+    }
+
+    return (st == S2 || countNumbers >= 2);
+}
+
+int main() {
+    string s;
+    cout << "Введите строку: ";
+    getline(cin, s);
+
+    if (belongsToLanguage(s))
+        cout << "Слово принадлежит языку (>=2 числа)\n";
+    else
+        cout << "Слово НЕ принадлежит языку\n";
+
+    return 0;
+}
+
+
